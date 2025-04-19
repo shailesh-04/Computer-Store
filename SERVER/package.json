@@ -1,0 +1,33 @@
+{
+    "name": "computer-store",
+    "version": "1.0.0",
+    "description": "Node.js backend for managing products, orders, users, and categories with TypeScript, MVC, and MySQL.",
+    "main": "dist/index.js",
+    "scripts": {
+        "dev": "ts-node-dev --respawn --transpile-only -r tsconfig-paths/register index.ts",
+        "build": "tsc && tsc-alias",
+        "start": "node dist/index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/shailesh-04/Computer-Store.git"
+    },
+    "keywords": [
+        "radhe.computer",
+        "computer store"
+    ],
+    "author": "shailesh makavana",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/shailesh-04/Computer-Store/issues"
+    },
+    "homepage": "https://github.com/shailesh-04/Computer-Store#readme",
+    "dependencies": {},
+    "devDependencies": {
+        "@types/express": "^4.17.17",
+        "ts-node-dev": "^2.0.0",
+        "typescript": "^5.0.0",
+        "tsconfig-paths": "^4.2.0",
+        "tsc-alias": "^1.8.7"
+    }
+}
