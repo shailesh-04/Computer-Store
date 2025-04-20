@@ -103,7 +103,7 @@ npm run dev
 
 ## 👨‍💻 Author
 
-**Shailesh Maurya**  
+**Shailesh Makavana**  
 _Insta: [shailesh.04m](https://www.instagram.com/shailesh.04m)_  
 _linkedin: [shailesh-04m](https://www.linkedin.com/in/shailesh-04m/)_  
 _Built with ❤️ for scalable e-commerce solutions._
