@@ -2,15 +2,16 @@
     "compilerOptions": {
         "baseUrl": "src",
         "paths": {
-            "@controllers/*":  ["./src/controllers/*"],
-            "@models/*":       ["./src/database/models/*"],
-            "@migrations/*":   ["./src/database/migrations/*"],
-            "@routes/*":       ["./src/routes/*"],
-            "@services/*":     ["./src/services/*"],
-            "@config/*":       ["./src/config/*"],
-            "@utils/*":        ["./src/utils/*"],
-            "@interfaces/*":   ["./src/interfaces/*"],
-            "@script/*":       ["./src/script/*"]
+            "@color":["./src/utils/color.ts"],
+            "@controllers/*": ["./src/controllers/*"],
+            "@models/*": ["./src/database/models/*"],
+            "@migrations/*": ["./src/database/migrations/*"],
+            "@routes/*": ["./src/routes/*"],
+            "@services/*": ["./src/services/*"],
+            "@config/*": ["./src/config/*"],
+            "@utils/*": ["./src/utils/*"],
+            "@interfaces/*": ["./src/interfaces/*"],
+            "@scripts/*": ["./src/scripts/*"]
         }
     }
 }

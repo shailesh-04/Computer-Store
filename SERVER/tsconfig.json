@@ -9,8 +9,10 @@
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
         "esModuleInterop": true,
+        "types": ["node"],
         "baseUrl": ".",
         "paths": {
+            "@color":["./src/utils/color.ts"],
             "@controllers/*": ["./src/controllers/*"],
             "@models/*": ["./src/database/models/*"],
             "@migrations/*": ["./src/database/migrations/*"],

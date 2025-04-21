@@ -24,8 +24,7 @@ class Migration {
             console.log("Successfully created table", this.table);
         } catch (error: any) {
             console.error("Failed to create table!");
-            console.log(error.sqlMessage || error.message);
-            throw error;
+            throw new Error(error.sqlMessage || error.message);
         }
     }
     public async dropTable(): Promise<void> {
@@ -34,8 +33,7 @@ class Migration {
             console.log("Successfully dropped table", this.table);
         } catch (error: any) {
             console.error("Failed to drop table!");
-            console.log(error.sqlMessage || error.message);
-            throw error;
+           throw new Error(error.sqlMessage || error.message);
         }
     }
     public async truncateTable(): Promise<void> {
@@ -44,8 +42,7 @@ class Migration {
             console.log("Successfully truncated table", this.table);
         } catch (error: any) {
             console.error("Failed to truncate table!");
-            console.log(error.sqlMessage || error.message);
-            throw error;
+           throw new Error(error.sqlMessage || error.message);
         }
     }
     public async addColumn(fieldName: string, type: string[]): Promise<void> {
@@ -57,8 +54,7 @@ class Migration {
             this.fields.push({ fieldName, type });
         } catch (error: any) {
             console.error(`Failed to add column ${fieldName}`);
-            console.log(error.sqlMessage || error.message);
-            throw error;
+           throw new Error(error.sqlMessage || error.message);
         }
     }
     public async dropColumn(columnName: string): Promise<void> {
@@ -70,8 +66,7 @@ class Migration {
             this.fields = this.fields.filter(field => field.fieldName !== columnName);
         } catch (error: any) {
             console.error(`Failed to drop column ${columnName}`);
-            console.log(error.sqlMessage || error.message);
-            throw error;
+           throw new Error(error.sqlMessage || error.message);
         }
     }
     public async renameTable(newTableName: string): Promise<void> {
@@ -83,8 +78,7 @@ class Migration {
             console.log(`Successfully renamed table to ${newTableName}`);
         } catch (error: any) {
             console.error(`Failed to rename table ${this.table}`);
-            console.log(error.sqlMessage || error.message);
-            throw error;
+           throw new Error(error.sqlMessage || error.message);
         }
     }
     public async tableExists(): Promise<boolean> {
@@ -95,25 +89,23 @@ class Migration {
             return result.rows[0].exists;
         } catch (error: any) {
             console.error(`Failed to check if table ${this.table} exists`);
-            console.log(error.sqlMessage || error.message);
-            throw error;
+           throw new Error(error.sqlMessage || error.message);
         }
     }
     public async migrate(callback: (table: Migration) => Promise<void>): Promise<void> {
         try {
             await callback(this);
             console.log(`Migration for table ${this.table} completed successfully`);
-        } catch (error) {
-            console.error(`Migration for table ${this.table} failed`);
-            throw error;
+        } catch (error:any) {
+            throw new Error(error.sqlMessage || error.message);
         }
     }
     public async sql(query:string):Promise<any[]>{
         try {
             const result = await database.query(query);
             return result;
-        } catch (error) {
-            throw error;
+        } catch (error:any) {
+           throw new Error(error.sqlMessage || error.message);
         }
     }
     public getFieldDefinitions(): FieldDefinitions {

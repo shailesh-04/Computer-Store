@@ -26,6 +26,7 @@ class Computers implements IClassComputers {
             graphics_card, operating_system, screen_size,
             price, stock_quantity
         } = body;
+        console.log(body)
 
         const [result] = await database.query(
             `INSERT INTO computers 
@@ -53,13 +54,11 @@ class Computers implements IClassComputers {
         );
         return result;
     }
-
     async read(): Promise<IComputers[]> {
         const [rows] = await database.query(`SELECT * FROM computers ORDER BY id DESC`);
         return rows as IComputers[];
     }
-
-    async getOne(id: string): Promise<IComputers[]> {
+    async readOne(id: string): Promise<IComputers[]> {
         const [rows] = await database.query(`SELECT * FROM computers WHERE id = ?`, [id]);
         return rows as IComputers[];
     }
@@ -69,6 +68,6 @@ class Computers implements IClassComputers {
         return result;
     }
 }
-const computers = new Computers();
-export const computersMigration = computers.migration;
-export default computers;
+const computersMigration = new Computers();
+export const migration = computersMigration.migration;
+export default computersMigration;

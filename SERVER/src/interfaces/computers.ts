@@ -20,5 +20,5 @@ export interface IClassComputers{
     update(id:string,body:IComputers):Promise<any[]>;
     read():Promise<IComputers[]>;
     delete(id:string):Promise<any[]>;
-    getOne(id:string):Promise<IComputers[]>;
+    readOne(id:string):Promise<IComputers[]>;
 }
