@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-const [,, arg] = process.argv;
+const [, , arg] = process.argv;
 if (!arg) {
     console.error("❌ Please provide a class name as an argument.");
     process.exit(1);
@@ -21,25 +21,27 @@ class ${className} implements IClass${className} {
     constructor() {
         this.migration = new Migration("${tableName}", {
             id: ["INT", "AUTO_INCREMENT", "PRIMARY KEY"],
-            demo: ["VARCHAR(100)", "NOT NULL"]
+                demo: ["VARCHAR(100)", "NOT NULL"],
+            created_at: ["TIMESTAMP", "DEFAULT CURRENT_TIMESTAMP"],
+            updated_at: ["TIMESTAMP", "DEFAULT CURRENT_TIMESTAMP", "ON UPDATE CURRENT_TIMESTAMP"]
         });
     }
     async create(body: I${className}): Promise<any[]> {
         const { demo } = body;
-        const [result] = await database.query(\`INSERT INTO ${tableName}(demo) VALUES (?)\`, [demo]);
+        const result = await database.query(\`INSERT INTO ${tableName}(demo) VALUES (?)\`, [demo]);
         return result;
     }
     async update(id: string, body: I${className}): Promise<any[]> {
         const { demo } = body;
-        const [result] = await database.query(\`UPDATE ${tableName} SET demo = ? WHERE id = ?\`, [demo, id]);
+        const result = await database.query(\`UPDATE ${tableName} SET demo = ? WHERE id = ?\`, [demo, id]);
         return result;
     }
     async read(): Promise<I${className}[]> {
-        const [rows] = await database.query(\`SELECT * FROM ${tableName} ORDER BY id DESC\`);
+        const rows = await database.query(\`SELECT * FROM ${tableName} ORDER BY id DESC\`);
         return rows as I${className}[];
     }
     async readOne(id: string): Promise<I${className}[]> {
-        const [rows] = await database.query(\`SELECT * FROM ${tableName} WHERE id = ?\`, [id]);
+        const rows = await database.query(\`SELECT * FROM ${tableName} WHERE id = ?\`, [id]);
         return rows as I${className}[];
     }
     async delete(id: string): Promise<any[]> {
@@ -55,6 +57,8 @@ const interfaceContent = `import Migration from "@utils/migration";
 export interface I${className} {
     id?: string;
     demo: string;
+    created_at?:string;
+    updated_at?:string;
 }
 export interface IClass${className} {
     migration: Migration;
@@ -67,9 +71,10 @@ export interface IClass${className} {
 `;
 fs.mkdirSync(targetDir, { recursive: true });
 fs.mkdirSync(interfaceDir, { recursive: true });
-fs.writeFileSync(filePath, migrationContent);
-console.log(`✅ Migration file created: ${filePath}`);
+
 if (!fs.existsSync(interfaceFilePath)) {
+    fs.writeFileSync(filePath, migrationContent);
+    console.log(`✅ Migration file created: ${filePath}`);
     fs.writeFileSync(interfaceFilePath, interfaceContent);
     console.log(`✅ Interface file created: ${interfaceFilePath}`);
 } else {

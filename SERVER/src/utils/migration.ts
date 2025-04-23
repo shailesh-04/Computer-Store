@@ -18,7 +18,6 @@ class Migration {
         const fieldDefs = this.fields
             .map(field => `${field.fieldName} ${field.type.join(' ')}`)
             .join(',\n  ');
-
         try {
             await database.query(`CREATE TABLE ${this.table} (\n  ${fieldDefs}\n);`);
             console.log("Successfully created table", this.table);
@@ -57,6 +56,7 @@ class Migration {
            throw new Error(error.sqlMessage || error.message);
         }
     }
+
     public async dropColumn(columnName: string): Promise<void> {
         try {
             await database.query(
@@ -100,9 +100,9 @@ class Migration {
             throw new Error(error.sqlMessage || error.message);
         }
     }
-    public async sql(query:string):Promise<any[]>{
+    public async sql(query:string,params:any[]):Promise<any[]>{
         try {
-            const result = await database.query(query);
+            const result = await database.query(query,params);
             return result;
         } catch (error:any) {
            throw new Error(error.sqlMessage || error.message);

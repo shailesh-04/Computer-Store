@@ -11,6 +11,8 @@ export interface IComputers{
     screen_size?:string;
     price:number;
     stock_quantity?:number;
+    descrition?:string;
+    image?:string;
     created_at?:string;
     updated_at?:string;
 }

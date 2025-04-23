@@ -16,6 +16,8 @@ class Computers implements IClassComputers {
             screen_size: ["DECIMAL(4,1)"],
             price: ["DECIMAL(10,2)", "NOT NULL"],
             stock_quantity: ["INT", "DEFAULT 0"],
+            descrition:["TEXT"],
+            image:["VARCHAR(255)"],
             created_at: ["TIMESTAMP", "DEFAULT CURRENT_TIMESTAMP"],
             updated_at: ["TIMESTAMP", "DEFAULT CURRENT_TIMESTAMP", "ON UPDATE CURRENT_TIMESTAMP"]
         });
@@ -24,15 +26,15 @@ class Computers implements IClassComputers {
         const {
             brand, model, processor, ram, storage,
             graphics_card, operating_system, screen_size,
-            price, stock_quantity
+            price, stock_quantity,descrition,image
         } = body;
+        
         console.log(body)
-
-        const [result] = await database.query(
+        const result = await database.query(
             `INSERT INTO computers 
-            (brand, model, processor, ram, storage, graphics_card, operating_system, screen_size, price, stock_quantity)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [brand, model, processor, ram, storage, graphics_card, operating_system, screen_size, price, stock_quantity]
+            (brand, model, processor, ram, storage, graphics_card, operating_system, screen_size, price, stock_quantity,descrition,image)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)`,
+            [brand, model, processor, ram, storage, graphics_card, operating_system, screen_size, price, stock_quantity,descrition,image]
         );
         return result;
     }
@@ -41,30 +43,31 @@ class Computers implements IClassComputers {
         const {
             brand, model, processor, ram, storage,
             graphics_card, operating_system, screen_size,
-            price, stock_quantity
+            price, stock_quantity,descrition,image
         } = body;
 
-        const [result] = await database.query(
+        const result = await database.query(
             `UPDATE computers SET 
             brand = ?, model = ?, processor = ?, ram = ?, storage = ?, 
             graphics_card = ?, operating_system = ?, screen_size = ?, 
             price = ?, stock_quantity = ?
+            descrition=?,image=?
             WHERE id = ?`,
-            [brand, model, processor, ram, storage, graphics_card, operating_system, screen_size, price, stock_quantity, id]
+            [brand, model, processor, ram, storage, graphics_card, operating_system, screen_size, price, stock_quantity,descrition,image, id]
         );
         return result;
     }
     async read(): Promise<IComputers[]> {
-        const [rows] = await database.query(`SELECT * FROM computers ORDER BY id DESC`);
+        const rows = await database.query(`SELECT * FROM computers ORDER BY id DESC`);
         return rows as IComputers[];
     }
     async readOne(id: string): Promise<IComputers[]> {
-        const [rows] = await database.query(`SELECT * FROM computers WHERE id = ?`, [id]);
+        const rows = await database.query(`SELECT * FROM computers WHERE id = ?`, [id]);
         return rows as IComputers[];
     }
 
     async delete(id: string): Promise<any[]> {
-        const [result] = await database.query(`DELETE FROM computers WHERE id = ?`, [id]);
+        const result = await database.query(`DELETE FROM computers WHERE id = ?`, [id]);
         return result;
     }
 }
