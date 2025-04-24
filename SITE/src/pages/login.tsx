@@ -5,8 +5,12 @@ export default function Login(): JSX.Element {
     const [password, setPassword] = useState("");
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const success = await login({ email, password });
-        console.log(success);
+        try {
+            const success = await login({ email, password });
+            alert(success.message   );
+        } catch (error) {
+            
+        }
     };
     return (
         <div className="h-screen flex justify-center items-center">

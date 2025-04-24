@@ -4,7 +4,11 @@ interface loginUser{
     email:string;
     password:string;
 }
-export const login = async (data:loginUser):Promise<IUsers> => {
-    const responce = await api.post<IUsers>("/user/login",data);
-    return responce.data;
+interface ApiResponse{
+    message:string;
+    data:IUsers;
+}
+export const login = async (data:loginUser):Promise<ApiResponse> => {
+    const response = await api.post<ApiResponse>("/user/login",data);
+    return response.data;
 }
