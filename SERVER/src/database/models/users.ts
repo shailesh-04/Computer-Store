@@ -14,7 +14,7 @@ class ComputerModel {
         this.delete = usersMigration.delete.bind(usersMigration);
     }
     public async login(parmam:any[]):Promise<any>{
-        const result = await migration.sql("select name,email,password,image from users where email= ? and password =? ",parmam);
+        const result = await migration.sql("select id,name,email,password,image from users where email= ? and password =? ",parmam);
         return result;
     }
 }

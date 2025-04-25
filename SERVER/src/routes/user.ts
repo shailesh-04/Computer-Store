@@ -7,5 +7,4 @@ user.get("/", usersController.read);
 user.get("/:id", usersController.readOne);
 user.put("/:id", usersController.update);
 user.delete("/:id", usersController.delete);
-user.post("/login",usersController.login);
 export default user;

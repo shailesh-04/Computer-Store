@@ -1,18 +1,20 @@
 {
     "extends": "./tsconfig.paths.json",
     "compilerOptions": {
-        "target": "ES2020",
+        "target": "ES2022",
         "module": "commonjs",
+        "moduleResolution": "node",
         "rootDir": ".",
         "outDir": "dist",
         "strict": true,
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
         "esModuleInterop": true,
+        "typeRoots": ["./node_modules/@types", "./types"],
         "types": ["node"],
         "baseUrl": ".",
         "paths": {
-            "@color":["./src/utils/color.ts"],
+            "@color": ["./src/utils/color.ts"],
             "@controllers/*": ["./src/controllers/*"],
             "@models/*": ["./src/database/models/*"],
             "@migrations/*": ["./src/database/migrations/*"],

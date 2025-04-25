@@ -1,15 +1,19 @@
 import React, { JSX, useState } from "react";
 import { login } from "@/services/User";
+import { useNavigate } from "react-router-dom";
 export default function Login(): JSX.Element {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [message, setMessage] = useState<string>("");
+
+    const navigate = useNavigate();
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             const success = await login({ email, password });
-            alert(success.message   );
-        } catch (error) {
-            
+            if (success) navigate("/");
+        } catch (error: any) {
+            setMessage(error.data.message);
         }
     };
     return (
@@ -36,6 +40,7 @@ export default function Login(): JSX.Element {
                 <button className="w-full bg-blue-600 text-white py-2 rounded">
                     Login
                 </button>
+                <p className="mt-5 text-center text-red-400">{message}</p>
             </form>
         </div>
     );

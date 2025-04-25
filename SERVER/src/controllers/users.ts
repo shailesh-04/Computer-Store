@@ -89,38 +89,5 @@ class UsersController {
             });
         }
     }
-    //POST api/user/login
-    static async login(req: Request, res: Response):Promise<void> {
-        try {
-            const { email, password } = req.body;
-            if (!email || !password) {
-
-                res.status(406).json({
-                    message: "invalid input data!",
-                    data: { email, password }
-                });
-                return
-            }
-            const [result] = await users.login([email, password]);
-            if (!result) {
-
-                res.status(406).json({
-                    message: "invalid valid email and password!",
-                    data: { email, password }
-                });
-                return;
-            }
-            res.status(200).json({
-                message: "Successfully Login!",
-                data: result
-            });
-        } catch (error: any) {
-            console.error(error);
-            res.status(500).json({
-                message: "Failed to login user!",
-                detail: error.message || error.sqlMessage
-            });
-        }
-    }
 }
 export default UsersController;
