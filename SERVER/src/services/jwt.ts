@@ -13,7 +13,7 @@ export class JwtService {
     // Access Token (short-lived)
     static async sign(payload: TokenPayload, options?: SignOptions): Promise<string> {
         return jwt.sign(payload, JWT_SECRET, {
-            expiresIn: '1h',
+            expiresIn: '5m',
             ...options,
         });
     }
@@ -29,7 +29,7 @@ export class JwtService {
     // Refresh Token (long-lived)
     static async signRefreshToken(payload: TokenPayload, options?: SignOptions): Promise<string> {
         return jwt.sign(payload, JWT_REFRESH_SECRET, {
-            expiresIn: '7d',
+            expiresIn: '10m',
             ...options,
         });
     }

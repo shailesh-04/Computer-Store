@@ -1,6 +1,5 @@
 import { Router } from "express";
 import usersController from "@controllers/users";
-
 const user = Router();
 user.post("/", usersController.create);
 user.get("/", usersController.read);

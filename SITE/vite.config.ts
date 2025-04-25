@@ -33,6 +33,6 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: '../SERVER/public/SITE',
+    outDir: '../SERVER/public/',
   },
 });

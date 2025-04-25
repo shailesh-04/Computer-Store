@@ -27,9 +27,9 @@ class App {
     }
     private router(): void {
         this.app.use("/api", router);
-        this.app.use("/", views);
+        //this.app.use("/", views);
         this.app.get("*splat", (req: Request, res: Response) => {
-            res.sendFile(path.join(__dirname, "../../public/SITE/index.html"));
+            res.sendFile(path.join(__dirname, "../../public/index.html"));
         });
     }
 }

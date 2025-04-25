@@ -10,7 +10,6 @@ import { IComputers } from "@/types/Computer";
 interface CartItem extends IComputers {
     quantity: number;
 }
-
 interface CartContextType {
     cart: CartItem[];
     addToCart: (item: IComputers) => void;
@@ -18,27 +17,21 @@ interface CartContextType {
     updateQuantity: (id: string, quantity: number) => void;
     clearCart: () => void;
 }
-
 const CartContext = createContext<CartContextType | undefined>(undefined);
-
 export const useCart = () => {
     const context = useContext(CartContext);
     if (!context) throw new Error("useCart must be used within CartProvider");
     return context;
 };
-
 const LOCAL_STORAGE_KEY = "radhe-computer-cart";
-
 export const CartProvider = ({ children }: { children: ReactNode }) => {
     const [cart, setCart] = useState<CartItem[]>(() => {
         const storedCart = localStorage.getItem(LOCAL_STORAGE_KEY);
         return storedCart ? JSON.parse(storedCart) : [];
     });
-
     useEffect(() => {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(cart));
     }, [cart]);
-
     const addToCart = (item: IComputers) => {
         setCart((prev) => {
             const exists = prev.find((p) => p.id === item.id);
@@ -55,7 +48,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const removeFromCart = (id: string) => {
         setCart((prev) => prev.filter((item) => item.id !== id));
     };
-
     const updateQuantity = (id: string, quantity: number) => {
         setCart((prev) =>
             prev.map((item) =>
@@ -65,9 +57,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             )
         );
     };
-
     const clearCart = () => setCart([]);
-
     return (
         <CartContext.Provider
             value={{
