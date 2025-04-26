@@ -1,9 +1,10 @@
 import { Router, Request, Response } from "express";
 import ComputerController from "@controllers/computers";
+import { adminApiMiddleware } from "src/middleware/admin";
 const computer = Router();
-computer.post("/", ComputerController.create);
+computer.post("/", adminApiMiddleware, ComputerController.create);
 computer.get("/", ComputerController.read);
 computer.get("/:id", ComputerController.readOne);
-computer.put("/:id", ComputerController.update);
-computer.delete("/:id", ComputerController.delete);
+computer.put("/:id", adminApiMiddleware, ComputerController.update);
+computer.delete("/:id", adminApiMiddleware, ComputerController.delete);
 export default computer;

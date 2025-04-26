@@ -18,12 +18,7 @@ export const logout = async (): Promise<{ message: string; detail: any }> => {
     return response.data;
 }
 export const authorize = async (): Promise<ApiResponse> => {
-    const accessToken = localStorage.getItem("accessToken");
-    const response = await api.get<ApiResponse>("/auth", {
-        headers: {
-            authorization: `Bearer ${accessToken}`,
-        },
-    });
+    const response = await api.get<ApiResponse>("/auth");
     return response.data;
 };
 

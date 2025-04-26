@@ -28,7 +28,7 @@ class UsersController {
     static async read(req: Request, res: Response) {
         try {
             const result = await users.read();
-            res.status(200).json(result);
+            res.status(200).json({user:result});
         } catch (error: any) {
             console.error(error);
             res.status(500).json({
@@ -45,7 +45,7 @@ class UsersController {
             if (!result) {
                 return res.status(404).json({ message: "User not found!" });
             }
-            res.status(200).json(result);
+            res.status(200).json({user:result});
         } catch (error: any) {
             console.error(error);
             res.status(500).json({

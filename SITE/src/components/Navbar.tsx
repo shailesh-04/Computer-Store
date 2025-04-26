@@ -1,19 +1,9 @@
 import { Link } from "react-router-dom";
 import { FaOpencart } from "react-icons/fa";
 import { useUser } from "@/context/UserContext";
-import { logout as logoutService } from "@/services/Auth";
-import { IoIosLogOut } from "react-icons/io";
+import ProfileMenu from "./Profile";
 export default function Navbar() {
-    const { user, logout } = useUser();
-    const logoutUser = async () => {
-        try {
-            const sucess = await logoutService();
-            logout();
-            alert(sucess.message);
-        } catch (error: any) {
-            alert(error.message);
-        }
-    };
+    const { user} = useUser();
     return (
         <nav className="bg-gray-900 text-white px-6 py-4 shadow-md sticky top-0 z-50">
             <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -34,24 +24,8 @@ export default function Navbar() {
                         <FaOpencart size={25} />
                     </Link>
                     {user ? (
-                        <div className="flex items-center gap-4">
-                            {user.image && (
-                                <img
-                                    src={user.image}
-                                    alt="Profile"
-                                    className="w-10 h-10 rounded-full object-cover"
-                                />
-                            )}
-                            <div>
-                                <p className="font-semibold">{user.name}</p>
-                                <p className="text-sm text-gray-500">
-                                    {user.email}
-                                </p>
-                            </div>
-                            <button onClick={logoutUser}>
-                                <IoIosLogOut />
-                            </button>
-                        </div>
+                       <ProfileMenu />
+
                     ) : (
                         <>
                             <Link

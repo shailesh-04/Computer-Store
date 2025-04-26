@@ -1,9 +1,10 @@
 import Navbar from "@/components/Navbar";
 import { useCart } from "@/context/CartContext";
-
+import { IoArrowBack } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
-
+    const navigate = useNavigate();
     const total = cart.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0
@@ -13,6 +14,11 @@ export default function CartPage() {
         <div className="bg-gray-100 min-h-screen">
             <Navbar />
             <div className="max-w-5xl mx-auto p-6">
+                <IoArrowBack
+                    size={25}
+                    className="mb-1.5 cursor-pointer"
+                    onClick={() => navigate(-1)}
+                />
                 <h1 className="text-3xl font-bold mb-6">Your Cart</h1>
                 {cart.length === 0 ? (
                     <p className="text-gray-600">Your cart is empty.</p>

@@ -2,6 +2,7 @@ import { JwtService } from "@services/jwt";
 import { NextFunction, Request, Response } from "express";
 export const authTokenMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
+
     const accessToken = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
     const refreshToken = req.cookies.refresh_token;
     if (!accessToken && !refreshToken) {

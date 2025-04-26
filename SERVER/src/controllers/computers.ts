@@ -31,7 +31,7 @@ class ComputerController {
     static async read(req: Request, res: Response) {
         try {
             const result = await computerModel.read();
-            res.status(200).json(result);
+            res.status(200).json({computer: result});
         } catch (error: any) {
             res.status(500).json({ message: "Failed to read records!", detail: error.message || error.sqlMessage });
         }
@@ -44,7 +44,7 @@ class ComputerController {
             if (!result) {
                 return res.status(404).json({ message: "Computer not found!" });
             }
-            res.status(200).json(result);
+            res.status(200).json({computer:result});
         } catch (error: any) {
             res.status(500).json({ message: "Failed to read record!", detail: error.message || error.sqlMessage });
         }
