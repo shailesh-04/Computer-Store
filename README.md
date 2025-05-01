@@ -101,12 +101,6 @@ npm run dev
 
 ---
 
-# How Its Work
--- user  : login => view computers => add to cart => place oder.
-
--- admin : login => view computers => view oders => accept and reject oder.
-                    |            └─ => manage computers(add,edit,delete).
-                    └── => view users => manage users(add,edit,delete).
 ## 👨‍💻 Author
 
 **Shailesh Makavana**  

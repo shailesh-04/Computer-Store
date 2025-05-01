@@ -6,20 +6,32 @@ type FieldDefinitions = {
 class Migration {
     private table: string;
     private fields: { fieldName: string; type: string[] }[];
-    constructor(table: string, fieldDefinitions: FieldDefinitions) {
+    private constraints: string[]; // Store constraints
+
+    constructor(
+        table: string,
+        fieldDefinitions: FieldDefinitions,
+        constraints: string[] = []
+    ) {
         database.testConnection();
         this.table = table;
         this.fields = Object.entries(fieldDefinitions).map(([fieldName, type]) => ({
             fieldName,
             type
         }));
-    } 
+        this.constraints = constraints;
+    }
+
     public async createTable(): Promise<void> {
         const fieldDefs = this.fields
-            .map(field => `${field.fieldName} ${field.type.join(' ')}`)
-            .join(',\n  ');
+            .map(field => `${field.fieldName} ${field.type.join(' ')}`);
+
+        const allDefs = [...fieldDefs, ...this.constraints]; // Combine fields and constraints
+
+        const query = `CREATE TABLE ${this.table} (\n  ${allDefs.join(',\n  ')}\n);`;
+
         try {
-            await database.query(`CREATE TABLE ${this.table} (\n  ${fieldDefs}\n);`);
+            await database.query(query);
             console.log("Successfully created table", this.table);
         } catch (error: any) {
             console.error("Failed to create table!");

@@ -15,3 +15,8 @@ export interface IComputers{
     created_at?:string;
     updated_at?:string;
 }
+export interface ComputerRespoce{
+    message?:string;
+    computer?:IComputers|IComputers[];
+    detail?:string;
+}

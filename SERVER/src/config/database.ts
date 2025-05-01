@@ -1,6 +1,6 @@
 import mysql from "mysql2/promise"
 import env from "./env"
-import color from "@color";
+import color from "@services/color";
 class Database {
     private pool: mysql.Pool;
     constructor() {

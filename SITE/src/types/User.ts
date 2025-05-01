@@ -7,3 +7,8 @@ export interface IUsers {
     created_at?:string;
     updated_at?:string;
 }
+export interface UserRespoce{
+    message?:string;
+    user?:IUsers|IUsers[];
+    detail?:string;
+}

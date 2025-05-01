@@ -1,65 +1,112 @@
 import path from "path";
 import fs from "fs/promises";
+import color from "@color";
+
 (async () => {
     if (require.main === module) {
         const args = process.argv.slice(2);
 
+        const showHeader = () => {
+            color(["\n════════════════════════════════════", "brightMagenta", ["bold", "underline"]]);
+            color(["📦 MIGRATION CLI TOOL", "brightCyan", "bold"]);
+            color(["════════════════════════════════════", "brightMagenta", ["bold", "underline"]]);
+        };
+
+        const showUsage = () => {
+            showHeader();
+            color(["Usage: node migration.js <command> <tableName> [...params]", "yellow", "bold"]);
+            color(["\nAvailable commands:", "brightMagenta", "bold"]);
+            color(["  create <tableName>", "green", "bold"], ["→ Create a new table", "white"]);
+            color(["  drop <tableName>", "green", "bold"], ["→ Drop an existing table", "white"]);
+            color(["  truncate <tableName>", "green", "bold"], ["→ Truncate a table", "white"]);
+            color(["  exists <tableName>", "green", "bold"], ["→ Check if a table exists", "white"]);
+            color(["  addColumn <tableName> <columnName> <type...>", "green", "bold"], ["→ Add a column", "white"]);
+            color(["  dropColumn <tableName> <columnName>", "green", "bold"], ["→ Drop a column", "white"]);
+            color(["  rename <tableName> <newTableName>", "green", "bold"], ["→ Rename a table", "white"]);
+            color(["  sql <tableName> <query>", "green", "bold"], ["→ Execute raw SQL", "white"]);
+            color(["\n⚡ Example:", "yellow", "bold"], ["npm migration addColumn users age INT", "white"]);
+            color(["════════════════════════════════════\n", "brightMagenta", ["bold", "underline"]]);
+        };
+
         if (args.length === 0) {
-            console.log("Usage: node migration.js <command> <tableName>");
-            console.log("Available commands:");
-            console.log("  create <tableName> - Create a new table");
-            console.log("  drop <tableName> - Drop an existing table");
-            console.log("  truncate <tableName> - Truncate a table");
-            console.log("  exists <tableName> - Check if a table exists");
-            console.log("  addColumn <tableName> <columnName> <type> - Add a column to a table");
-            console.log("  dropColumn <tableName> <columnName> - Drop a column from a table");
-            console.log("  rename <tableName> <newTableName> - Rename a table");
+            showUsage();
             process.exit(1);
         }
-        const command = args[0];
-        const tableName = args[1];
-        const query = args[2];
+
+        const [command, tableName, ...rest] = args;
+
         if (!tableName) {
-            console.error("❌ Please specify a table name.");
+            color(["❌ Please specify a table name.", "red", "bold"]);
             process.exit(1);
         }
+
         const migrationFolder = path.resolve(__dirname, "../database/migrations");
         const filePattern = new RegExp(`^${tableName.toLowerCase()}_\\d+\\.ts$`);
         const files = await fs.readdir(migrationFolder);
         const migrationFile = files.find(f => filePattern.test(f));
+
         if (!migrationFile) {
-            console.error(`❌ No migration file found for table '${tableName}'`);
+            color([`❌ No migration file found for table '${tableName}'`, "red", "bold"]);
             process.exit(1);
         }
+
         const fullPath = path.join(migrationFolder, migrationFile);
         const migrationModule = await import(fullPath);
-        const migration = migrationModule.default;
+        const migration = migrationModule.default.migration;
+
         try {
             switch (command) {
                 case "create":
-                    await migration.migration.createTable();
+                    await migration.createTable();
                     break;
                 case "drop":
-                    await migration.migration.dropTable();
+                    await migration.dropTable();
+                    break;
+                case "truncate":
+                    await migration.truncateTable();
+                    break;
+                case "exists":
+                    const exists = await migration.tableExists();
+                    color([`🧾 Table ${tableName} exists: ${exists}`, "cyan", "bold"]);
+                    break;
+                case "addColumn":
+                    if (rest.length < 2) {
+                        color(["❌ Usage: addColumn <tableName> <columnName> <type...>", "red", "bold"]);
+                        break;
+                    }
+                    await migration.addColumn(rest[0], rest.slice(1));
+                    break;
+                case "dropColumn":
+                    if (rest.length < 1) {
+                        color(["❌ Usage: dropColumn <tableName> <columnName>", "red", "bold"]);
+                        break;
+                    }
+                    await migration.dropColumn(rest[0]);
+                    break;
+                case "rename":
+                    if (rest.length < 1) {
+                        color(["❌ Usage: rename <tableName> <newTableName>", "red", "bold"]);
+                        break;
+                    }
+                    await migration.renameTable(rest[0]);
                     break;
                 case "sql":
-                    try{
-                        console.log(await migration.migration.sql(query));
-                    }catch(error:any){
-                        console.error("SQL ERROR : ",error.message);
+                    if (rest.length < 1) {
+                        color(["❌ Usage: sql <tableName> <query>", "red", "bold"]);
+                        break;
                     }
-                break;
+                    const result = await migration.sql(rest.join(" "), []);
+                    color(["📄 SQL Result:", "brightGreen", "bold"], [JSON.stringify(result), "white"]);
+                    break;
                 default:
-                    console.error(`❌ Unknown command '${command}'`);
-                    process.exit(1);
+                    color([`❌ Unknown command '${command}'`, "red", "bold"]);
+                    showUsage();
+                    break;
             }
         } catch (error: any) {
-            console.error("❌ Command failed:", error.sqlMessage || error.message);
-            process.exit(1);
-        }
-        finally{
+            color(["❌ Command failed:", "red", "bold"], [error.sqlMessage || error.message, "white"]);
+        } finally {
             process.exit(1);
         }
     }
 })();
-

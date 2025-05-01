@@ -1,6 +1,5 @@
 import api from "@/api/axios";
-import { UserRespoce } from "@/types/Respoce";
-import { IUsers } from "@/types/User";
+import { IUsers,UserRespoce} from "@/types/User";
 
 export const _getUsers = async (): Promise<UserRespoce> => {
     const responce = await api.get(`/user/`)

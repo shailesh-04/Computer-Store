@@ -49,7 +49,7 @@ export default function ProfileMenu() {
                         </div>
                     </div>
                     <button
-                        onClick={() => navigate("user/edit")}
+                        onClick={() => navigate("/user/edit")}
                         className="w-full bg-blue-500 cursor-pointer text-white py-1.5 rounded hover:bg-blue-600 mb-2"
                     >
                         Edit Profile

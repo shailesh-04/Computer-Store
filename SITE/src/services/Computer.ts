@@ -1,7 +1,6 @@
 // src/services/computerService.ts
 import api from "@/api/axios";
-import { ComputerRespoce } from "@/types/Respoce";
-import { IComputers } from "@/types/Computer";
+import { IComputers, ComputerRespoce} from "@/types/Computer";
 
 export const getComputers = async (): Promise<ComputerRespoce> => {
     const response = await api.get("/computer");

@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
-        "baseUrl": "src",
+        "baseUrl": ".",
         "paths": {
-            "@color":["./src/utils/color.ts"],
+            "@color":["./src/services/color.ts"],
             "@controllers/*": ["./src/controllers/*"],
             "@models/*": ["./src/database/models/*"],
             "@migrations/*": ["./src/database/migrations/*"],

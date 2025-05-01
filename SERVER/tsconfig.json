@@ -12,19 +12,6 @@
         "esModuleInterop": true,
         "typeRoots": ["./node_modules/@types", "./types"],
         "types": ["node"],
-        "baseUrl": ".",
-        "paths": {
-            "@color": ["./src/utils/color.ts"],
-            "@controllers/*": ["./src/controllers/*"],
-            "@models/*": ["./src/database/models/*"],
-            "@migrations/*": ["./src/database/migrations/*"],
-            "@routes/*": ["./src/routes/*"],
-            "@services/*": ["./src/services/*"],
-            "@config/*": ["./src/config/*"],
-            "@utils/*": ["./src/utils/*"],
-            "@interfaces/*": ["./src/interfaces/*"],
-            "@scripts/*": ["./src/scripts/*"]
-        }
     },
     "include": ["src/**/*", "index.ts"],
     "exclude": ["node_modules"]
