@@ -112,7 +112,7 @@ class Migration {
             throw new Error(error.sqlMessage || error.message);
         }
     }
-    public async sql(query:string,params:any[]):Promise<any[]>{
+    public async sql(query:string,params?:any[]):Promise<any[]>{
         try {
             const result = await database.query(query,params);
             return result;

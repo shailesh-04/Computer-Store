@@ -5,18 +5,14 @@ type UserContextType = {
   login: (userData: IUsers) => void;
   logout: () => void;
 };
-
 const UserContext = createContext<UserContextType | undefined>(undefined);
-
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<IUsers | null>(null);
-
   const login = (userData: IUsers) => setUser(userData);
   const logout = () => {
     setUser(null);
     localStorage.setItem("accessToken","");
   }
-
   return (
     <UserContext.Provider value={{ user, login, logout }}>
       {children}

@@ -4,10 +4,14 @@ import { IComputers } from "@/types/Computer";
 import { IoArrowBack } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "@/context/UserContext";
+import { useEffect, useState } from "react";
+import { usrOrder } from "@/services/Order";
+import { IOrders } from "@/types/Order";
 export default function CartPage() {
     const { user } = useUser();
     const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
     const navigate = useNavigate();
+    const [userOrder, setUserOrder] = useState<IOrders[]>([]);
     const total = cart.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0
@@ -17,7 +21,7 @@ export default function CartPage() {
             navigate("/login");
             return;
         }
-        navigate("/pay",{state:item});
+        navigate("/pay", { state: item });
     }
     function purchesCart() {
         if (!user) {
@@ -26,7 +30,19 @@ export default function CartPage() {
         }
         navigate("/pay");
     }
-
+    useEffect(() => {
+        getOrders();
+    }, [user]);
+    async function getOrders() {
+        if (user?.id)
+            try {
+                let responce = await usrOrder(user?.id);
+                console.log(responce);
+                if (responce.orders) setUserOrder(responce.orders);
+            } catch (error: any) {
+                console.log(error.data);
+            }
+    }
     return (
         <div className="bg-gray-100 min-h-screen">
             <Navbar />
@@ -112,6 +128,49 @@ export default function CartPage() {
                             >
                                 Clear Cart
                             </button>
+                        </div>
+                    </>
+                )}
+                <br />
+                <br />
+                <h1 className="text-3xl font-bold mb-6">Your Order</h1>
+                {userOrder.length === 0 ? (
+                    <p className="text-gray-600">
+                        Your Orders is no avalable or you no login.
+                    </p>
+                ) : (
+                    <>
+                        <div className="space-y-4">
+                            {userOrder.map((item, index) => {
+                                const create_at = new Date(item.created_at??'').toDateString();
+                                return (
+                                    <div
+                                        key={index}
+                                        className="bg-white p-4 rounded shadow flex justify-between items-center gap-10"
+                                    >
+                                        {/* 🖼️ Product Image */}
+                                        <div className="w-24 h-24 flex-shrink-0 rounded overflow-hidden border">
+                                            <img
+                                                src={item.image}
+                                                alt={item.model}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <div className="w-full">
+                                            <h2 className="text-lg font-semibold">
+                                                {item.brand} {item.model}
+                                            </h2>
+                                            <p className="text-sm text-gray-600">
+                                                ₹{item.total_price}
+                                            </p>
+                                        </div>
+                                        <div className="flex items-center flex-col w-full gap-3">
+                                            <p>{item.status}</p>
+                                            <p>{create_at}</p>  
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </>
                 )}

@@ -4,13 +4,13 @@ class OrdersController {
     //POST api/orders
     static async create(req: Request, res: Response) {
         try {
-            const { user_id,computer_id,quantity,total_price,status } = req.body;
-            const result: any = await ordersModel.create({ user_id,computer_id,quantity,total_price,status });
+            const { user_id, computer_id, quantity, total_price, status } = req.body;
+            const result: any = await ordersModel.create({ user_id, computer_id, quantity, total_price, status });
             res.status(201).json({
                 message: "Successfully created new Record!",
                 data: {
                     id: result.insertId,
-                    user_id,computer_id,quantity,total_price,status
+                    user_id, computer_id, quantity, total_price, status
                 }
             });
         } catch (error: any) {
@@ -21,11 +21,38 @@ class OrdersController {
             });
         }
     }
+    //POST api/orders/order
+    static async order(req: Request, res: Response) {
+        try {
+            const { user_id, computer_id, quantity, total_price } = req.body;
+            let computer_ids = computer_id.split(",");
+            let quantitys = quantity.split(",");
+            const status = 'pending';
+            let result = '';
+            computer_ids.forEach(async (value: string, index: number, array: string[]) => {
+                result += await ordersModel.create({ user_id, computer_id: computer_ids[index], quantity: quantitys[index], total_price, status });
+            })
+
+            res.status(201).json({
+                message: "Successfully created new Record!",
+                data: {
+                    id: result,
+                    user_id, computer_id, quantity, total_price, status
+                }
+            });
+        } catch (error: any) {
+            console.error(error);
+            res.status(500).json({
+                message: "Failed payment re try order!",
+                detail: error.message || error.sqlMessage
+            });
+        }
+    }
     // GET api/orders
     static async read(req: Request, res: Response) {
         try {
             const result = await ordersModel.read();
-            res.status(200).json({orders:result});
+            res.status(200).json({ orders: result });
         } catch (error: any) {
             console.error(error);
             res.status(500).json({
@@ -42,7 +69,7 @@ class OrdersController {
             if (!result) {
                 return res.status(404).json({ message: "No avalable any record this ID!" });
             }
-            res.status(200).json({orders:result});
+            res.status(200).json({ orders: result });
         } catch (error: any) {
             console.error(error);
             res.status(500).json({
@@ -55,11 +82,11 @@ class OrdersController {
     static async update(req: Request, res: Response) {
         try {
             const { id } = req.params;
-            const { user_id,computer_id,quantity,total_price,status } = req.body;
-            const result: any = await ordersModel.update(id, {user_id,computer_id,quantity,total_price,status });
+            const { user_id, computer_id, quantity, total_price, status } = req.body;
+            const result: any = await ordersModel.update(id, { user_id, computer_id, quantity, total_price, status });
             res.status(200).json({
                 message: "Successfully Update Record!",
-                orders: { id, user_id,computer_id,quantity,total_price,status}
+                orders: { id, user_id, computer_id, quantity, total_price, status }
             });
         } catch (error: any) {
             console.error(error);
@@ -85,5 +112,22 @@ class OrdersController {
             });
         }
     }
+    //GET  api/order/:id/user
+    static async userOrder(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const result = await ordersModel.userOrder(id);
+            if (!result.length) {
+                return res.status(404).json({ orders: result, message: "No avalable any record this ID!" });
+            }
+            res.status(200).json({ orders: result });
+        } catch (error: any) {
+            console.error(error.message || error.sqlMessage);
+            res.status(500).json({
+                message: "Failed to fetch fetch data!",
+                detail: error.message || error.sqlMessage
+            });
+        }
+    }
 }
-export default OrdersController ;
+export default OrdersController;

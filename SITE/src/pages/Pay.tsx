@@ -6,6 +6,7 @@ import { IComputers } from "@/types/Computer";
 import { IoArrowBack } from "react-icons/io5";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { order } from "@/services/Order";
 
 export default function PaymentPage() {
     const location = useLocation();
@@ -15,21 +16,32 @@ export default function PaymentPage() {
     const item: IComputers | undefined = location.state;
     const [paymentMethod, setPaymentMethod] = useState("cod");
     const [showSuccess, setShowSuccess] = useState(false);
-
     const products = item ? [item] : cart;
-    const total = products.reduce((sum, p) => sum + p.price * p.stock_quantity, 0);
 
-    function handlePayment() {
+    const total = products.reduce((sum, p) => sum + p.price * p.quantity, 0);
+    async function handlePayment() {
+        const itemIds = products.map((val) => val.id).join(",");
+        const quantity = products.map((val) => val.quantity).join(",");
         if (!user) {
             navigate("/login");
             return;
         }
-
-        setShowSuccess(true);
-        setTimeout(() => {
-            item ? removeFromCart(item.id) : clearCart();
-            navigate("/");
-        }, 2500);
+        try {
+            const result = await order({
+                user_id: user.id,
+                computer_id: itemIds,
+                quantity: quantity,
+                total_price: total,
+            });
+            console.log(result)
+            setShowSuccess(true);
+            setTimeout(() => {
+                item ? removeFromCart(item.id) : clearCart();
+                navigate("/");
+            }, 2500);
+        } catch (error: any) {
+            alert(error.data.message);
+        }
     }
 
     return (
@@ -46,12 +58,16 @@ export default function PaymentPage() {
                 </div>
 
                 <div className="bg-white p-6 rounded shadow mb-6">
-                    <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+                    <h2 className="text-xl font-semibold mb-4">
+                        Order Summary
+                    </h2>
                     <ul className="space-y-4">
                         {products.map((p) => (
                             <li key={p.id} className="flex justify-between">
-                                <span>{p.brand} {p.model} (x{p.stock_quantity})</span>
-                                <span>₹{p.price * p.stock_quantity}</span>
+                                <span>
+                                    {p.brand} {p.model} (x{p.quantity})
+                                </span>
+                                <span>₹{p.price * p.quantity}</span>
                             </li>
                         ))}
                     </ul>
@@ -61,7 +77,9 @@ export default function PaymentPage() {
                 </div>
 
                 <div className="bg-white p-6 rounded shadow mb-6">
-                    <h2 className="text-xl font-semibold mb-4">Choose Payment Method</h2>
+                    <h2 className="text-xl font-semibold mb-4">
+                        Choose Payment Method
+                    </h2>
                     <div className="space-y-3">
                         {["card", "upi", "netbanking", "cod"].map((method) => (
                             <label key={method} className="block capitalize">
@@ -70,10 +88,14 @@ export default function PaymentPage() {
                                     name="payment"
                                     value={method}
                                     checked={paymentMethod === method}
-                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                    onChange={(e) =>
+                                        setPaymentMethod(e.target.value)
+                                    }
                                     className="mr-2"
                                 />
-                                {method === "cod" ? "Cash on Delivery" : method.toUpperCase()}
+                                {method === "cod"
+                                    ? "Cash on Delivery"
+                                    : method.toUpperCase()}
                             </label>
                         ))}
                     </div>
@@ -100,13 +122,25 @@ export default function PaymentPage() {
                             initial={{ scale: 0.5, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.5, opacity: 0 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                            transition={{
+                                type: "spring",
+                                stiffness: 300,
+                                damping: 20,
+                            }}
                             className="bg-white p-10 rounded-lg shadow-xl text-center max-w-sm"
                         >
-                            <div className="text-green-500 text-4xl mb-4">✔️</div>
-                            <h2 className="text-2xl font-bold mb-2">Payment Successful</h2>
-                            <p className="text-gray-600 mb-4">Thank you for your order!</p>
-                            <p className="text-sm text-gray-400">Redirecting to home...</p>
+                            <div className="text-green-500 text-4xl mb-4">
+                                ✔️
+                            </div>
+                            <h2 className="text-2xl font-bold mb-2">
+                                Payment Successful
+                            </h2>
+                            <p className="text-gray-600 mb-4">
+                                Thank you for your order!
+                            </p>
+                            <p className="text-sm text-gray-400">
+                                Redirecting to home...
+                            </p>
                         </motion.div>
                     </motion.div>
                 )}

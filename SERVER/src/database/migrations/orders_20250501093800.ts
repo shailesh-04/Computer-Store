@@ -21,12 +21,12 @@ class orders implements IClassOders {
     }
     async create(body: IOrders): Promise<any[]> {
         const { user_id,computer_id,quantity,total_price,status} = body;
-        const result = await database.query(`INSERT INTO orders(demo) VALUES (?)`, [ user_id,computer_id,quantity,total_price,status]);
+        const result = await database.query(`INSERT INTO orders(user_id,computer_id,quantity,total_price,status) VALUES (?,?,?,?,?)`, [ user_id,computer_id,quantity,total_price,status]);
         return result;
     }
     async update(id: string, body: IOrders): Promise<any[]> {
         const {  user_id,computer_id,quantity,total_price,status } = body;
-        const result = await database.query(`UPDATE orders SET demo = ? WHERE id = ?`, [ user_id,computer_id,quantity,total_price,status, id]);
+        const result = await database.query(`UPDATE orders SET user_id = ?,computer_id = ?,quantity = ?,total_price = ?,status = ? WHERE id = ?`, [ user_id,computer_id,quantity,total_price,status, id]);
         return result;
     }
     async read(): Promise<IOrders[]> {

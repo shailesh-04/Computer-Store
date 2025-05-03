@@ -1,7 +1,9 @@
-export interface IOrders {
+import { IComputers } from "./Computer";
+
+export interface IOrders extends IComputers {
     id?: string;
-    user_id: number;
-    computer_id: number;
+    user_id: string;
+    computer_id: string;
     quantity: number;
     total_price: number;
     status?: string;
