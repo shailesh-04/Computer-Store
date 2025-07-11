@@ -1,5 +1,4 @@
 import database from "@config/database";
-
 type FieldDefinitions = {
     [fieldName: string]: string[];
 };

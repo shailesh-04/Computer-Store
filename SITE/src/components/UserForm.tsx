@@ -1,4 +1,3 @@
-// src/components/UserForm.tsx
 import { useState, useEffect } from "react";
 import { IUsers } from "@/types/User";
 
@@ -32,46 +31,56 @@ export default function UserForm({ onSubmit, initialData }: UserFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <input
-        type="text"
-        name="name"
-        placeholder="Name"
-        value={form.name}
-        onChange={handleChange}
-        required
-        className="border p-2 w-full"
-      />
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value={form.email}
-        onChange={handleChange}
-        required
-        className="border p-2 w-full"
-      />
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={form.password}
-        onChange={handleChange}
-        required
-        className="border p-2 w-full"
-      />
-      <input
-        type="text"
-        name="image"
-        placeholder="Image URL"
-        value={form.image}
-        onChange={handleChange}
-        required
-        className="border p-2 w-full"
-      />
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2">
-        {initialData ? "Update User" : "Add User"}
-      </button>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <h2 className="text-xl font-semibold text-center">
+        {initialData ? "Update User" : "Add New User"}
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          value={form.name}
+          onChange={handleChange}
+          required
+          className="border p-2 rounded w-full"
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={handleChange}
+          required
+          className="border p-2 rounded w-full"
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={handleChange}
+          required
+          className="border p-2 rounded w-full"
+        />
+        <input
+          type="text"
+          name="image"
+          placeholder="Image URL"
+          value={form.image}
+          onChange={handleChange}
+          required
+          className="border p-2 rounded w-full"
+        />
+      </div>
+      <div className="text-center">
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+        >
+          {initialData ? "Update User" : "Add User"}
+        </button>
+      </div>
     </form>
   );
 }
