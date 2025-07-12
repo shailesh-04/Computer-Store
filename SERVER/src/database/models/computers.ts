@@ -1,5 +1,5 @@
-import computersMigration from "@migrations/computers_20250421053924";
-import { IComputers } from "@interfaces/computers";
+import computersMigration from "@migrations/products_20250421053924";
+import { IProducts } from "@interfaces/products";
 class CumputerModel {
     create = computersMigration.create;
     read = computersMigration.read;

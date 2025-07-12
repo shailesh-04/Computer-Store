@@ -1,9 +1,11 @@
 import Migration from "@utils/migration";
 export interface IProduct_images {
     id?: string;
-    demo: string;
-    created_at?:string;
-    updated_at?:string;
+    product_id: string;
+    url: string;
+    alt_text: string;
+    created_at?: string;
+    updated_at?: string;
 }
 export interface IClassProduct_images {
     migration: Migration;

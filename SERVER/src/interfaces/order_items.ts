@@ -1,9 +1,12 @@
 import Migration from "@utils/migration";
 export interface IOrder_items {
     id?: string;
-    demo: string;
-    created_at?:string;
-    updated_at?:string;
+    order_id: string;
+    product_id: string;
+    quantity: number;
+    price: number;
+    created_at?: string;
+    updated_at?: string;
 }
 export interface IClassOrder_items {
     migration: Migration;

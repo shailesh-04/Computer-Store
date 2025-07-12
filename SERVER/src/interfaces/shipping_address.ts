@@ -1,9 +1,16 @@
 import Migration from "@utils/migration";
 export interface IShipping_address {
     id?: string;
-    demo: string;
-    created_at?:string;
-    updated_at?:string;
+    user_id: string;
+    order_id: string;
+    full_name: string;
+    address: string;
+    city: string;
+    state: string;
+    zip_code: string;
+    country: string;
+    created_at?: string;
+    updated_at?: string;
 }
 export interface IClassShipping_address {
     migration: Migration;

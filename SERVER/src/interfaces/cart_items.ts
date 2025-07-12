@@ -1,9 +1,11 @@
 import Migration from "src/utils/migration";
 export interface ICart_items {
     id?: string;
-    demo: string;
-    created_at?:string;
-    updated_at?:string;
+    user_id: string;
+    product_id: string;
+    quantity: number;
+    created_at?: string;
+    updated_at?: string;
 }
 export interface IClassCart_items {
     migration: Migration;

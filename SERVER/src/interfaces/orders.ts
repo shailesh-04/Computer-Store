@@ -1,12 +1,12 @@
 import Migration from "@utils/migration";
 export interface IOrders {
     id?: string;
-    user_id: number;
-    computer_id: number;
-    quantity: number;
-    total_price: number;
-    status?: string;
-}    
+    user_id: string;
+    total: number;
+    status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+    created_at?: string;
+    updated_at?: string;
+}
 export interface IClassOders {
     migration: Migration;
     create(body: IOrders): Promise<any[]>;

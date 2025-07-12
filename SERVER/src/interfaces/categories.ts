@@ -1,9 +1,10 @@
 import Migration from "src/utils/migration";
 export interface ICategories {
     id?: string;
-    demo: string;
-    created_at?:string;
-    updated_at?:string;
+    name: string;
+    slug: string;
+    created_at?: string;
+    updated_at?: string;
 }
 export interface IClassCategories {
     migration: Migration;
