@@ -1,9 +1,16 @@
 import { Router } from "express";
 import categoriesController from "@controllers/categories";
-const categoriesRouter = Router();
-categoriesRouter.post("/",categoriesController.create);
-categoriesRouter.get("/", categoriesController.read);
-categoriesRouter.get("/:id", categoriesController.readOne);
-categoriesRouter.put("/:id",categoriesController.update);
-categoriesRouter.delete("/:id",categoriesController.delete);
-export default categoriesRouter;
+const controller = new categoriesController();
+const categories = Router();
+
+categories
+    .route("/")
+    .post(controller.create)
+    .get(controller.read);
+categories
+    .route("/:id")
+    .get(controller.readOne)
+    .put(controller.update)
+    .delete(controller.delete);
+
+export default categories;

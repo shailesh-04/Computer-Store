@@ -2,7 +2,7 @@ import express, { Response, Request } from "express";
 import database from "./database";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import router from "@routes/_index";
+import index from "@routes/_index";
 import path from "path";
 import views from "@routes/_views";
 class App {
@@ -26,7 +26,7 @@ class App {
         this.app.use(express.static(path.join(__dirname, "../../public")));
     }
     private router(): void {
-        this.app.use("/api", router);
+        this.app.use("/api", index);
         this.app.use("/", views);
         this.app.get("*splat", (req: Request, res: Response) => {
             res.sendFile(path.join(__dirname, "../../public/index.html"));

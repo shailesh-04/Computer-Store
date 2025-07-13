@@ -1,16 +1,21 @@
 import categoriesModel from "@models/categories";
 import { Request, Response } from "express";
 class CategoriesController {
+    private model: categoriesModel;
+    constructor() {
+        this.model = new categoriesModel();
+    }
     //POST api/categories
-    static async create(req: Request, res: Response) {
+    create = async (req: Request, res: Response) => {
         try {
-            const { demo } = req.body;
-            const result: any = await categoriesModel.create({ demo });
+            const { name, slug } = req.body;
+            const result: any = await this.model.create({ name, slug });
             res.status(201).json({
                 message: "Successfully created new Record!",
                 data: {
                     id: result.insertId,
-                    demo
+                    name,
+                    slug
                 }
             });
         } catch (error: any) {
@@ -22,10 +27,10 @@ class CategoriesController {
         }
     }
     // GET api/categories
-    static async read(req: Request, res: Response) {
+    read = async (req: Request, res: Response) => {
         try {
-            const result = await categoriesModel.read();
-            res.status(200).json({categories:result});
+            const result = await this.model.read();
+            res.status(200).json({ categories: result });
         } catch (error: any) {
             console.error(error);
             res.status(500).json({
@@ -35,14 +40,14 @@ class CategoriesController {
         }
     }
     //GET api/categories/:id
-    static async readOne(req: Request, res: Response) {
+    readOne = async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
-            const result = await categoriesModel.readOne(id);
+            const result = await this.model.readOne(id);
             if (!result) {
                 return res.status(404).json({ message: "No avalable any record this ID!" });
             }
-            res.status(200).json({categories:result});
+            res.status(200).json({ categories: result });
         } catch (error: any) {
             console.error(error);
             res.status(500).json({
@@ -52,14 +57,14 @@ class CategoriesController {
         }
     }
     // PUT api/categories/:id
-    static async update(req: Request, res: Response) {
+    update = async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
-            const { demo } = req.body;
-            const result: any = await categoriesModel.update(id, {demo });
+            const { name, slug } = req.body;
+            const result: any = await this.model.update(id, { name, slug });
             res.status(200).json({
                 message: "Successfully Update Record!",
-                categories: { id, demo}
+                categories: { id, name, slug }
             });
         } catch (error: any) {
             console.error(error);
@@ -70,12 +75,16 @@ class CategoriesController {
         }
     }
     //DELETE api/categories/:id
-    static async delete(req: Request, res: Response) {
+    delete = async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
-            await categoriesModel.delete(id);
+            const result = await this.model.exists(id);
+            if (!result) {
+                return res.status(404).json({ message: "No available record with this ID!" });
+            }
+            await this.model.delete(id);
             res.status(200).json({
-                message: "Sucessfuly Delete Record!"
+                message: "Successfully Deleted Record!"
             });
         } catch (error: any) {
             console.error(error);
@@ -86,4 +95,4 @@ class CategoriesController {
         }
     }
 }
-export default CategoriesController ;
+export default CategoriesController;

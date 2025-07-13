@@ -52,8 +52,11 @@ import color from "@color";
 
         const fullPath = path.join(migrationFolder, migrationFile);
         const migrationModule = await import(fullPath);
-        const migration = migrationModule.default.migration;
+        const table = await migrationModule.default;
+        console.log(table);
 
+        const migration = table.migration;
+        
         try {
             switch (command) {
                 case "create":
@@ -97,6 +100,11 @@ import color from "@color";
                     }
                     const result = await migration.sql(rest.join(" "), []);
                     color(["📄 SQL Result:", "brightGreen", "bold"], [JSON.stringify(result), "white"]);
+                    break;
+                case "seeder":
+                    console.log("Running seeder...");
+                    const payload = await table.seeder();
+                    color(["📦 Seeder Result:", "brightGreen", "bold"], [JSON.stringify(payload), "white"]);
                     break;
                 default:
                     color([`❌ Unknown command '${command}'`, "red", "bold"]);

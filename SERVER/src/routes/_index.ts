@@ -1,11 +1,15 @@
 import { Router } from "express";
-import computer from "./computer";
+import products from "./products";
 import user from "./user";
 import auth from "./auth";
 import ordersRouter from "./orders";
+import { catchErr } from "@color";
+import categories from "./categories";
 const router = Router();
-router.use("/computer",computer);
-router.use("/user",user);
-router.use("/auth",auth);
-router.use("/order",ordersRouter);
+try {
+    router.use("/products",products);
+    router.use("/categories",categories);
+} catch (error) {
+    catchErr(error, "Error in index route");
+}
 export default router;

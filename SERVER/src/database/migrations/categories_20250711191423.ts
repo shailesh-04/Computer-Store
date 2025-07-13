@@ -13,7 +13,7 @@ class Categories implements IClassCategories {
         });
     }
 
-    async create(body: ICategories): Promise<any[]> {
+    public async create(body: ICategories): Promise<any[]> {
         const { name, slug } = body;
         const result = await database.query(
             `INSERT INTO categories(name, slug) VALUES (?,?)`, 
@@ -22,7 +22,7 @@ class Categories implements IClassCategories {
         return result;
     }
 
-    async update(id: string, body: ICategories): Promise<any[]> {
+    public async update(id: string, body: ICategories): Promise<any[]> {
         const { name, slug } = body;
         const result = await database.query(
             `UPDATE categories SET name=?, slug=? WHERE id=?`, 
@@ -30,23 +30,39 @@ class Categories implements IClassCategories {
         );
         return result;
     }
-
-    async read(): Promise<ICategories[]> {
+    public async read(): Promise<ICategories[]> {
         const rows = await database.query(`SELECT * FROM categories ORDER BY id DESC`);
         return rows as ICategories[];
     }
 
-    async readOne(id: string): Promise<ICategories[]> {
+    public async readOne(id: string): Promise<ICategories[]> {
         const rows = await database.query(`SELECT * FROM categories WHERE id=?`, [id]);
         return rows as ICategories[];
     }
 
-    async delete(id: string): Promise<any[]> {
+    public async delete(id: string): Promise<any[]> {
         const result = await database.query(`DELETE FROM categories WHERE id=?`, [id]);
         return result;
     }
+    public async seeder(): Promise<any[]> {
+        const categories = [
+            { name: "Laptops", slug: "laptops" },
+            { name: "Desktops", slug: "desktops" },
+            { name: "Monitors", slug: "monitors" },
+            { name: "Accessories", slug: "accessories" },
+            { name: "Printers", slug: "printers" },
+            { name: "Networking", slug: "networking" },
+            { name: "Storage", slug: "storage" },
+            { name: "Software", slug: "software" },
+            { name: "Components", slug: "components" },
+            { name: "Gaming", slug: "gaming" }
+        ];
+        const results = [];
+        for (const category of categories) {
+            const result = await this.create(category);
+            results.push(result);
+        }
+        return results;
+    }
 }
-
-const categoriesMigration = new Categories();
-export const migration = categoriesMigration.migration;
-export default categoriesMigration;
+export default new Categories();
