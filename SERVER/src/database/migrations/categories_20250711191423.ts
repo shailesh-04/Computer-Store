@@ -1,7 +1,7 @@
 import database from "@config/database";
-import { IClassCategories, ICategories } from "@interfaces/categories";
+import { TypeClassCategories, TypeCategories } from "@interfaces/categories";
 import Migration from "src/utils/migration";
-class Categories implements IClassCategories {
+class Categories implements TypeClassCategories {
     public migration: Migration;
     constructor() {
         this.migration = new Migration("categories", {
@@ -13,7 +13,7 @@ class Categories implements IClassCategories {
         });
     }
 
-    public async create(body: ICategories): Promise<any[]> {
+    public async create(body: TypeCategories): Promise<any[]> {
         const { name, slug } = body;
         const result = await database.query(
             `INSERT INTO categories(name, slug) VALUES (?,?)`, 
@@ -22,7 +22,7 @@ class Categories implements IClassCategories {
         return result;
     }
 
-    public async update(id: string, body: ICategories): Promise<any[]> {
+    public async update(id: string, body: TypeCategories): Promise<any[]> {
         const { name, slug } = body;
         const result = await database.query(
             `UPDATE categories SET name=?, slug=? WHERE id=?`, 
@@ -30,14 +30,14 @@ class Categories implements IClassCategories {
         );
         return result;
     }
-    public async read(): Promise<ICategories[]> {
+    public async read(): Promise<TypeCategories[]> {
         const rows = await database.query(`SELECT * FROM categories ORDER BY id DESC`);
-        return rows as ICategories[];
+        return rows as TypeCategories[];
     }
 
-    public async readOne(id: string): Promise<ICategories[]> {
+    public async readOne(id: string): Promise<TypeCategories[]> {
         const rows = await database.query(`SELECT * FROM categories WHERE id=?`, [id]);
-        return rows as ICategories[];
+        return rows as TypeCategories[];
     }
 
     public async delete(id: string): Promise<any[]> {

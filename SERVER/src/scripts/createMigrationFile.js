@@ -15,7 +15,11 @@ if (!arg) {
     process.exit(1);
 }
 const __filename = fileURLToPath(import.meta.url);
-const className = arg.charAt(0).toUpperCase() + arg.slice(1);
+const className = (arg.charAt(0).toUpperCase() + arg.slice(1))
+    .split("_")
+    .map((val, i) => val.charAt(0).toUpperCase() + val.slice(1))
+    .join("");
+    
 const tableName = arg.toLowerCase();
 const time = new Date()
     .toISOString()

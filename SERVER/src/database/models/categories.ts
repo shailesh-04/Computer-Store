@@ -1,7 +1,7 @@
 import database from "@config/database";
-import { ICategories } from "@interfaces/categories";
+import { TypeCategories } from "@interfaces/categories";
 class CategoriesModel {
-    public async create(body: ICategories): Promise<any[]> {
+    public async create(body: TypeCategories): Promise<any[]> {
         const { name, slug } = body;
         const result = await database.query(
             `INSERT INTO categories(name, slug) VALUES (?,?)`,
@@ -9,7 +9,7 @@ class CategoriesModel {
         );
         return result;
     }
-    public async update(id: string, body: ICategories): Promise<any[]> {
+    public async update(id: string, body: TypeCategories): Promise<any[]> {
         const { name, slug } = body;
         const result = await database.query(
             `UPDATE categories SET name=?, slug=? WHERE id=?`,
@@ -17,13 +17,13 @@ class CategoriesModel {
         );
         return result;
     }
-    public async read(): Promise<ICategories[]> {
+    public async read(): Promise<TypeCategories[]> {
         const rows = await database.query(`SELECT * FROM categories ORDER BY id DESC`);
-        return rows as ICategories[];
+        return rows as TypeCategories[];
     }
-    public async readOne(id: string): Promise<ICategories[]> {
+    public async readOne(id: string): Promise<TypeCategories[]> {
         const rows = await database.query(`SELECT * FROM categories WHERE id=?`, [id]);
-        return rows as ICategories[];
+        return rows as TypeCategories[];
     }
     public async delete(id: string): Promise<any[]> {
         const result = await database.query(`DELETE FROM categories WHERE id=?`, [id]);

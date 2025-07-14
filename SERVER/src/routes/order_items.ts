@@ -1,9 +1,15 @@
 import { Router } from "express";
-import order_itemsController from "@controllers/order_items";
-const order_itemsRouter = Router();
-order_itemsRouter.post("/",order_itemsController.create);
-order_itemsRouter.get("/", order_itemsController.read);
-order_itemsRouter.get("/:id", order_itemsController.readOne);
-order_itemsRouter.put("/:id",order_itemsController.update);
-order_itemsRouter.delete("/:id",order_itemsController.delete);
-export default order_itemsRouter;
+import OrderItemsControllers from "@controllers/order_items";
+const orderItems = Router();
+const controller = new OrderItemsControllers();
+
+orderItems.route("/")
+    .post(controller.create)
+    .get(controller.read);
+
+orderItems.route("/:id")
+    .get(controller.readOne)
+    .put(controller.update)
+    .delete(controller.delete);
+    
+export default orderItems;

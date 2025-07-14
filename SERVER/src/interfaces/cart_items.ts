@@ -1,5 +1,5 @@
 import Migration from "src/utils/migration";
-export interface ICart_items {
+export interface TypeCartItems {
     id?: string;
     user_id: string;
     product_id: string;
@@ -7,11 +7,11 @@ export interface ICart_items {
     created_at?: string;
     updated_at?: string;
 }
-export interface IClassCart_items {
+export interface TypeClassCartItems {
     migration: Migration;
-    create(body: ICart_items): Promise<any[]>;
-    update(id: string, body: ICart_items): Promise<any[]>;
-    read(): Promise<ICart_items[]>;
-    readOne(id: string): Promise<ICart_items[]>;
+    create(body: TypeCartItems): Promise<any[]>;
+    update(id: string, body: TypeCartItems): Promise<any[]>;
+    read(): Promise<TypeCartItems[]>;
+    readOne(id: string): Promise<TypeCartItems[]>;
     delete(id: string): Promise<any[]>;
 }

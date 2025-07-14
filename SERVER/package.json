@@ -9,7 +9,7 @@
         "start": "node dist/index.js",
         "migration": "ts-node -r tsconfig-paths/register src/scripts/migrations.ts",
         "migration:create": "node src/scripts/createMigrationFile.js",
-        "test": "node test.js"
+        "test": "jest"
     },
     "repository": {
         "type": "git",
@@ -39,8 +39,11 @@
         "@types/cookie-parser": "^1.4.8",
         "@types/cors": "^2.8.17",
         "@types/express": "^4.17.17",
+        "@types/jest": "^30.0.0",
         "@types/jsonwebtoken": "^9.0.9",
         "@types/node": "^22.14.1",
+        "jest": "^30.0.4",
+        "ts-jest": "^29.4.0",
         "ts-node-dev": "^2.0.0",
         "tsc-alias": "^1.8.7",
         "tsconfig-paths": "^4.2.0",

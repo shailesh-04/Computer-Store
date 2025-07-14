@@ -7,6 +7,7 @@ categories
     .route("/")
     .post(controller.create)
     .get(controller.read);
+    
 categories
     .route("/:id")
     .get(controller.readOne)

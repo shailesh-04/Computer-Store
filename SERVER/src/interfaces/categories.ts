@@ -1,16 +1,16 @@
 import Migration from "src/utils/migration";
-export interface ICategories {
+export interface TypeCategories {
     id?: string;
     name: string;
     slug: string;
     created_at?: string;
     updated_at?: string;
 }
-export interface IClassCategories {
+export interface TypeClassCategories {
     migration: Migration;
-    create(body: ICategories): Promise<any[]>;
-    update(id: string, body: ICategories): Promise<any[]>;
-    read(): Promise<ICategories[]>;
-    readOne(id: string): Promise<ICategories[]>;
+    create(body: TypeCategories): Promise<any[]>;
+    update(id: string, body: TypeCategories): Promise<any[]>;
+    read(): Promise<TypeCategories[]>;
+    readOne(id: string): Promise<TypeCategories[]>;
     delete(id: string): Promise<any[]>;
 }

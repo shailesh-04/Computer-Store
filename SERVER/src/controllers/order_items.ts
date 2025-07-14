@@ -1,16 +1,20 @@
-import order_itemsModel from "@models/order_items";
+import OrderItemsModel from "@models/order_items";
 import { Request, Response } from "express";
-class Order_itemsController {
+class OrderItemsControllers {
     //POST api/order_items
-    static async create(req: Request, res: Response) {
+    private model: OrderItemsModel;
+    constructor() {
+        this.model = new OrderItemsModel();
+    }
+    create = async (req: Request, res: Response) => {
         try {
-            const { demo } = req.body;
-            const result: any = await order_itemsModel.create({ demo });
+            const { order_id, product_id, quantity, price } = req.body;
+            const result: any = await this.model.create({ order_id, product_id, quantity, price });
             res.status(201).json({
                 message: "Successfully created new Record!",
                 data: {
                     id: result.insertId,
-                    demo
+                    order_id, product_id, quantity, price
                 }
             });
         } catch (error: any) {
@@ -22,10 +26,10 @@ class Order_itemsController {
         }
     }
     // GET api/order_items
-    static async read(req: Request, res: Response) {
+    read = async (req: Request, res: Response) => {
         try {
-            const result = await order_itemsModel.read();
-            res.status(200).json({order_items:result});
+            const result = await this.model.read();
+            res.status(200).json({ order_items: result });
         } catch (error: any) {
             console.error(error);
             res.status(500).json({
@@ -35,14 +39,14 @@ class Order_itemsController {
         }
     }
     //GET api/order_items/:id
-    static async readOne(req: Request, res: Response) {
+    readOne = async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
-            const result = await order_itemsModel.readOne(id);
+            const result = await this.model.readOne(id);
             if (!result) {
                 return res.status(404).json({ message: "No avalable any record this ID!" });
             }
-            res.status(200).json({order_items:result});
+            res.status(200).json({ order_items: result });
         } catch (error: any) {
             console.error(error);
             res.status(500).json({
@@ -52,14 +56,14 @@ class Order_itemsController {
         }
     }
     // PUT api/order_items/:id
-    static async update(req: Request, res: Response) {
+    update = async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
-            const { demo } = req.body;
-            const result: any = await order_itemsModel.update(id, {demo });
+            const { order_id, product_id, quantity, price } = req.body;
+            const result: any = await this.model.update(id, { order_id, product_id, quantity, price });
             res.status(200).json({
                 message: "Successfully Update Record!",
-                order_items: { id, demo}
+                order_items: { id, order_id, product_id, quantity, price }
             });
         } catch (error: any) {
             console.error(error);
@@ -70,10 +74,10 @@ class Order_itemsController {
         }
     }
     //DELETE api/order_items/:id
-    static async delete(req: Request, res: Response) {
+    delete = async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
-            await order_itemsModel.delete(id);
+            await this.model.delete(id);
             res.status(200).json({
                 message: "Sucessfuly Delete Record!"
             });
@@ -86,4 +90,4 @@ class Order_itemsController {
         }
     }
 }
-export default Order_itemsController ;
+export default OrderItemsControllers;

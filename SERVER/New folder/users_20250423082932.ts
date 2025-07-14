@@ -50,6 +50,5 @@ class Users implements IClassUsers {
     }
 }
 
-const usersMigration = new Users();
-export const migration = usersMigration.migration;
-export default usersMigration;
+
+export default new Users();

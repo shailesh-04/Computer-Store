@@ -29,6 +29,7 @@ class CategoriesController {
     // GET api/categories
     read = async (req: Request, res: Response) => {
         try {
+            
             const result = await this.model.read();
             res.status(200).json({ categories: result });
         } catch (error: any) {

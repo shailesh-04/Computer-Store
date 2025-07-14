@@ -1,7 +1,8 @@
-export const migrationContent = (className,tableName)=> `import database from "@config/database";
-import { IClass${className}, I${className} } from "@interfaces/${tableName}";
+export const migrationContent = (className,tableName)=> 
+`import database from "@config/database";
+import { TypeClass${className}, Type${className} } from "@interfaces/${tableName}";
 import Migration from "@services/migration";
-class ${className} implements IClass${className} {
+class ${className} implements TypeClass${className} {
     public migration: Migration;
     constructor() {
         this.migration = new Migration("${tableName}", {
@@ -11,23 +12,23 @@ class ${className} implements IClass${className} {
             updated_at: ["TIMESTAMP", "DEFAULT CURRENT_TIMESTAMP", "ON UPDATE CURRENT_TIMESTAMP"]
         });
     }
-    async create(body: I${className}): Promise<any[]> {
+    async create(body: Type${className}): Promise<any[]> {
         const { demo } = body;
         const result = await database.query(\`INSERT INTO ${tableName}(demo) VALUES (?)\`, [demo]);
         return result;
     }
-    async update(id: string, body: I${className}): Promise<any[]> {
+    async update(id: string, body: Type${className}): Promise<any[]> {
         const { demo } = body;
         const result = await database.query(\`UPDATE ${tableName} SET demo = ? WHERE id = ?\`, [demo, id]);
         return result;
     }
-    async read(): Promise<I${className}[]> {
+    async read(): Promise<Type${className}[]> {
         const rows = await database.query(\`SELECT * FROM ${tableName} ORDER BY id DESC\`);
-        return rows as I${className}[];
+        return rows as Type${className}[];
     }
-    async readOne(id: string): Promise<I${className}[]> {
+    async readOne(id: string): Promise<Type${className}[]> {
         const rows = await database.query(\`SELECT * FROM ${tableName} WHERE id = ?\`, [id]);
-        return rows as I${className}[];
+        return rows as Type${className}[];
     }
     async delete(id: string): Promise<any[]> {
         const [result] = await database.query(\`DELETE FROM ${tableName} WHERE id = ?\`, [id]);
@@ -37,21 +38,21 @@ class ${className} implements IClass${className} {
 const ${tableName}Migration = new ${className}();
 export const migration = ${tableName}Migration.migration;
 export default ${tableName}Migration;
-`;
-
+`
+;
 export const interfaceContent = (className)=> `import Migration from "@services/migration";
-export interface I${className} {
+export interface Type${className} {
     id?: string;
     demo: string;
     created_at?:string;
     updated_at?:string;
 }
-export interface IClass${className} {
+export interface TypeClass${className} {
     migration: Migration;
-    create(body: I${className}): Promise<any[]>;
-    update(id: string, body: I${className}): Promise<any[]>;
-    read(): Promise<I${className}[]>;
-    readOne(id: string): Promise<I${className}[]>;
+    create(body: Type${className}): Promise<any[]>;
+    update(id: string, body: Type${className}): Promise<any[]>;
+    read(): Promise<Type${className}[]>;
+    readOne(id: string): Promise<Type${className}[]>;
     delete(id: string): Promise<any[]>;
 }
 `;
@@ -154,7 +155,6 @@ class ${className}Controller {
     }
 }
 export default ${className}Controller ;`;
-
 export const routerContent = (tableName)=>`import { Router } from "express";
 import ${tableName}Controller from "@controllers/${tableName}";
 const ${tableName}Router = Router();

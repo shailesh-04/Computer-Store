@@ -1,5 +1,5 @@
 import Migration from "@utils/migration";
-export interface IOrder_items {
+export interface TypeOrderItems {
     id?: string;
     order_id: string;
     product_id: string;
@@ -8,11 +8,11 @@ export interface IOrder_items {
     created_at?: string;
     updated_at?: string;
 }
-export interface IClassOrder_items {
+export interface TypeClassOrderItems {
     migration: Migration;
-    create(body: IOrder_items): Promise<any[]>;
-    update(id: string, body: IOrder_items): Promise<any[]>;
-    read(): Promise<IOrder_items[]>;
-    readOne(id: string): Promise<IOrder_items[]>;
+    create(body: TypeOrderItems): Promise<any[]>;
+    update(id: string, body: TypeOrderItems): Promise<any[]>;
+    read(): Promise<TypeOrderItems[]>;
+    readOne(id: string): Promise<TypeOrderItems[]>;
     delete(id: string): Promise<any[]>;
 }
