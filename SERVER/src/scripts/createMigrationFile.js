@@ -81,9 +81,12 @@ if (flag)
             fs.writeFileSync(migrate.filePath, migrate.content);
             console.log(`✅ Migration file created: ${migrate.filePath}`);
         }
+        color(["🟢 All files created successfully", "green", "bold"]);
     } catch (error) {
         color(["🔴 Faild to create files", "red", "bold"]);
         color([`${error.message}`, "red"]);
     }
-
-color(["🟢 Complete creating files and folder", "green", "bold"]);
+else {
+    color(["🔴 Faild to create files", "red", "bold"]);
+    color(["Please change the name of the class or delete the existing file", "red"]);
+}

@@ -1,90 +1,95 @@
-import users from "@models/users";
+import UsersModel from "@models/users";
 import { Request, Response } from "express";
 class UsersController {
-    //POST api/user
-    static async create(req: Request, res: Response) {
+    private model: UsersModel;
+    constructor() {
+        this.model = new UsersModel();
+    }
+    //POST api/users
+    create = async (req: Request, res: Response) => {
         try {
-            const { name, email, password, image } = req.body;
-            const result: any = await users.create({ name, email, password, image });
+            const { name } = req.body;
+            const payload: any = await this.model.create({ name });
             res.status(201).json({
-                message: "Successfully created new user!",
-                data: {
-                    id: result.insertId,
-                    name,
-                    email,
-                    password,
-                    image
+                message: "Successfully created new Record!",
+                payload: {
+                    id: payload.insertId,
+                    name
                 }
             });
         } catch (error: any) {
             console.error(error);
             res.status(500).json({
-                message: "Failed to create user record!",
+                message: "Failed to create new record!",
                 detail: error.message || error.sqlMessage
             });
         }
     }
-    // GET api/user
-    static async read(req: Request, res: Response) {
+    // GET api/users
+    read = async (req: Request, res: Response) => {
         try {
-            const result = await users.read();
-            res.status(200).json({user:result});
+            
+            const result = await this.model.read();
+            res.status(200).json({ users: result });
         } catch (error: any) {
             console.error(error);
             res.status(500).json({
-                message: "Failed to fetch users!",
+                message: "Failed to fetch data!",
                 detail: error.message || error.sqlMessage
             });
         }
     }
-    //GET api/user/:id
-    static async readOne(req: Request, res: Response) {
+    //GET api/users/:id
+    readOne = async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
-            const result = await users.readOne(id);
-            if (!result) {
-                return res.status(404).json({ message: "User not found!" });
+            const payload = await this.model.readOne(id);
+            if (!payload || payload.length === 0) {
+                return res.status(404).json({ message: "No available record with this ID!" });
             }
-            res.status(200).json({user:result});
+            res.status(200).json({ payload: payload[0] });
         } catch (error: any) {
             console.error(error);
             res.status(500).json({
-                message: "Failed to fetch user!",
+                message: "Failed to fetch fetch data!",
                 detail: error.message || error.sqlMessage
             });
         }
     }
-    // PUT api/user/:id
-    static async update(req: Request, res: Response) {
+    // PUT api/users/:id
+    update = async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
-            const { name, email, password, image } = req.body;
-            const result: any = await users.update(id, { name, email, password, image });
-
+            const { name } = req.body;
+            const payload: any = await this.model.update(id, { name });
             res.status(200).json({
-                message: "User updated successfully!",
-                data: { id, name, email, password, image }
+                message: "Successfully Update Record!",
+                payload: { id, name }
             });
         } catch (error: any) {
             console.error(error);
             res.status(500).json({
-                message: "Failed to update user!",
+                message: "Failed to update record!",
                 detail: error.message || error.sqlMessage
             });
         }
     }
-    //DELETE api/user/:id
-    static async delete(req: Request, res: Response) {
+    //DELETE api/users/:id
+    delete = async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
-            await users.delete(id);
+            const payload = await this.model.exists(id);
+            if (!payload || payload.length === 0) {
+                return res.status(404).json({ message: "No available record with this ID!" });
+            }
+            await this.model.delete(id);
             res.status(200).json({
-                message: "User deleted successfully!"
+                message: "Successfully Deleted Record!"
             });
         } catch (error: any) {
             console.error(error);
             res.status(500).json({
-                message: "Failed to delete user!",
+                message: "Failed to delete record!",
                 detail: error.message || error.sqlMessage
             });
         }

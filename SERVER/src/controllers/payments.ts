@@ -1,16 +1,20 @@
-import paymentsModel from "@models/payments";
+import PaymentsModel from "@models/payments";
 import { Request, Response } from "express";
 class PaymentsController {
+    private model: PaymentsModel;
+    constructor() {
+        this.model = new PaymentsModel();
+    }
     //POST api/payments
-    static async create(req: Request, res: Response) {
+    create = async (req: Request, res: Response) => {
         try {
-            const { demo } = req.body;
-            const result: any = await paymentsModel.create({ demo });
+            const { name } = req.body;
+            const payload: any = await this.model.create({ name });
             res.status(201).json({
                 message: "Successfully created new Record!",
-                data: {
-                    id: result.insertId,
-                    demo
+                payload: {
+                    id: payload.insertId,
+                    name
                 }
             });
         } catch (error: any) {
@@ -22,10 +26,11 @@ class PaymentsController {
         }
     }
     // GET api/payments
-    static async read(req: Request, res: Response) {
+    read = async (req: Request, res: Response) => {
         try {
-            const result = await paymentsModel.read();
-            res.status(200).json({payments:result});
+            
+            const result = await this.model.read();
+            res.status(200).json({ payments: result });
         } catch (error: any) {
             console.error(error);
             res.status(500).json({
@@ -35,14 +40,14 @@ class PaymentsController {
         }
     }
     //GET api/payments/:id
-    static async readOne(req: Request, res: Response) {
+    readOne = async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
-            const result = await paymentsModel.readOne(id);
-            if (!result) {
-                return res.status(404).json({ message: "No avalable any record this ID!" });
+            const payload = await this.model.readOne(id);
+            if (!payload || payload.length === 0) {
+                return res.status(404).json({ message: "No available record with this ID!" });
             }
-            res.status(200).json({payments:result});
+            res.status(200).json({ payload: payload[0] });
         } catch (error: any) {
             console.error(error);
             res.status(500).json({
@@ -52,14 +57,14 @@ class PaymentsController {
         }
     }
     // PUT api/payments/:id
-    static async update(req: Request, res: Response) {
+    update = async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
-            const { demo } = req.body;
-            const result: any = await paymentsModel.update(id, {demo });
+            const { name } = req.body;
+            const payload: any = await this.model.update(id, { name });
             res.status(200).json({
                 message: "Successfully Update Record!",
-                payments: { id, demo}
+                payload: { id, name }
             });
         } catch (error: any) {
             console.error(error);
@@ -70,12 +75,16 @@ class PaymentsController {
         }
     }
     //DELETE api/payments/:id
-    static async delete(req: Request, res: Response) {
+    delete = async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
-            await paymentsModel.delete(id);
+            const payload = await this.model.exists(id);
+            if (!payload || payload.length === 0) {
+                return res.status(404).json({ message: "No available record with this ID!" });
+            }
+            await this.model.delete(id);
             res.status(200).json({
-                message: "Sucessfuly Delete Record!"
+                message: "Successfully Deleted Record!"
             });
         } catch (error: any) {
             console.error(error);
@@ -86,4 +95,4 @@ class PaymentsController {
         }
     }
 }
-export default PaymentsController ;
+export default PaymentsController;
